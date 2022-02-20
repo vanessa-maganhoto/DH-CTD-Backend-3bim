@@ -3,7 +3,7 @@
 
 ### Atividades e trabalhos da disciplina de Backend do 3°bimestre (fevereiro a maio de 2022) do CTD da Digital House.
 #### Tópicos contemplados na disciplina
-* Testes unitários JUni
+* Testes unitários JUnit
 * Template Method pattern
 * Chain of Responsibility pattern
 * Proxy pattern
