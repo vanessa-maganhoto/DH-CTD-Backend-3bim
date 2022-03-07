@@ -14,7 +14,7 @@ public class ArvoreFactory {
     private ArvoreFactory() {
     }
 
-    ;
+
 
     public static ArvoreFactory getInstance() {
         return instance;

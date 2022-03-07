@@ -17,7 +17,7 @@ public class Program {
 
         Runtime runtime = Runtime.getRuntime();
         System.out.println("Memória utilizada: " + (runtime.totalMemory() - runtime.freeMemory()) / (1024 * 1024));
-
+        System.out.println("Número de árvores: " + floresta.size());
 
     }
 
