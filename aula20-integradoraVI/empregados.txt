@@ -1,0 +1,4 @@
+Mario;Brandão;xxxx;3.2
+Marcelo;Boda;aaa;1.5
+Matheus;Alves;yyyy;6.54
+Miguel;Santos;fff;5.98
