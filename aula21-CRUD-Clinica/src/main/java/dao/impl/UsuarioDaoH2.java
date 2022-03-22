@@ -1,7 +1,7 @@
 package dao.impl;
 
-
-import com.dhbrasil.springboot.aula21.model.Endereco;
+import com.dhbrasil.springboot.aula21.model.Dentista;
+import com.dhbrasil.springboot.aula21.model.Usuario;
 import dao.IDao;
 import dao.config.ConfiguracaoJDBC;
 
@@ -9,59 +9,59 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnderecoDaoH2 implements IDao<Endereco> {
+public class UsuarioDaoH2 implements IDao<Usuario> {
 
     private ConfiguracaoJDBC configuracaoJDBC;
 
-    public EnderecoDaoH2() {
+    public UsuarioDaoH2() {
         this.configuracaoJDBC = new ConfiguracaoJDBC();
     }
-    // Salvar
+
+    //Salvar
     @Override
-    public Endereco salvar(Endereco endereco){
+    public Usuario salvar(Usuario usuario) {
         Connection conexao = configuracaoJDBC.conectarComBancoDeDados();
         PreparedStatement pstmt = null;
 
-        String query = String.format("INSERT INTO enderecos" +
-                "(rua, numero, bairro, cidade, estado) " +
-                "VALUES ('%s', '%s', '%s', '%s', '%s') ",
-                endereco.getNumero(),
-                endereco.getNumero(),
-                endereco.getBairro(),
-                endereco.getCidade(),
-                endereco.getEstado());
+        String query = String.format("INSERT INTO usuarios " +
+                        "(nome ,email, senha, acesso) " +
+                        "VALUES ('%s','%s','%s','%s')",
+                usuario.getNome(),
+                usuario.getEmail(),
+                usuario.getSenha(),
+                usuario.getAcesso());
 
         try {
             pstmt = conexao.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             pstmt.executeUpdate();
             ResultSet keys = pstmt.getGeneratedKeys();
             if (keys.next())
-                endereco.setId(keys.getInt(1));
+                usuario.setId(keys.getInt(1));
             pstmt.close();
             conexao.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return endereco;
+        return usuario;
     }
 
     // Buscar por ID
 
     // Buscar todos os registros
     @Override
-    public List<Endereco> buscarTodos(){
+    public List<Usuario> buscarTodos(){
         Connection connection = configuracaoJDBC.conectarComBancoDeDados();
         PreparedStatement pstmt = null;
 
-        String query = "SELECT * FROM enderecos";
-        List<Endereco> enderecos = new ArrayList<>();
+        String query = "SELECT * FROM usuarios";
+        List<Usuario> usuarios = new ArrayList<>();
 
         try{
             pstmt = connection.prepareStatement(query);
             ResultSet result = pstmt.executeQuery();
 
             while(result.next()){
-                enderecos.add(criarObjetoEndereco(result));
+                usuarios.add(criarObjetoDentista(result));
             }
             pstmt.close();
             connection.close();
@@ -70,18 +70,17 @@ public class EnderecoDaoH2 implements IDao<Endereco> {
             e.printStackTrace();
         }
 
-        return enderecos;
+        return usuarios;
     }
 
-    // Atualizar
+    //Atualizar
 
     // Excluir
-
     @Override
     public void excluir(Integer id){
         Connection conexao = configuracaoJDBC.conectarComBancoDeDados();
         Statement stmt = null;
-        String query = String.format("DELETE FROM enderecos WHERE id = '%s'", id);
+        String query = String.format("DELETE FROM usuarios WHERE id = '%s'", id);
         try{
             stmt = conexao.createStatement();
             stmt.executeUpdate(query);
@@ -92,15 +91,13 @@ public class EnderecoDaoH2 implements IDao<Endereco> {
         }
     }
 
-    private Endereco criarObjetoEndereco(ResultSet result) throws SQLException{
-        return new Endereco(
+    private Usuario criarObjetoDentista(ResultSet result) throws SQLException{
+        return new Usuario(
                 result.getInt("id"),
-                result.getString("rua"),
-                result.getString("numero"),
-                result.getString("bairro"),
-                result.getString("cidade"),
-                result.getString("estado"));
-
+                result.getString("nome"),
+                result.getString("email"),
+                result.getString("senha"),
+                result.getInt("acesso"));
 
     }
 

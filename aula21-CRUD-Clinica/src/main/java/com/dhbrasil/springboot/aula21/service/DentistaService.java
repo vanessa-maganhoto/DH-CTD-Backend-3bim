@@ -7,11 +7,12 @@ import java.util.List;
 
 public class DentistaService {
 
+    private IDao<Dentista> dentistaIDao;
+
     public DentistaService(IDao<Dentista> dentistaIDao) {
         this.dentistaIDao = dentistaIDao;
     }
 
-    private IDao<Dentista> dentistaIDao;
 
     public Dentista salvar(Dentista dentista){
         dentistaIDao.salvar(dentista);
@@ -21,6 +22,10 @@ public class DentistaService {
     public List<Dentista> buscarTodos(){
         return dentistaIDao.buscarTodos();
 
+    }
+
+    public void excluir(Integer id){
+        dentistaIDao.excluir(id);
     }
 
 

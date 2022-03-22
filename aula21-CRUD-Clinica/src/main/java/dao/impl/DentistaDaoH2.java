@@ -4,10 +4,7 @@ import com.dhbrasil.springboot.aula21.model.Dentista;
 import dao.IDao;
 import dao.config.ConfiguracaoJDBC;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +13,7 @@ public class DentistaDaoH2 implements IDao<Dentista> {
     private ConfiguracaoJDBC configuracaoJDBC;
 
     public DentistaDaoH2() {
+
         this.configuracaoJDBC = new ConfiguracaoJDBC();
     }
 
@@ -81,6 +79,20 @@ public class DentistaDaoH2 implements IDao<Dentista> {
     // Atualizar
 
     // Excluir
+    @Override
+    public void excluir(Integer id){
+        Connection conexao = configuracaoJDBC.conectarComBancoDeDados();
+        Statement stmt = null;
+        String query = String.format("DELETE FROM dentistas WHERE id = '%s'", id);
+        try{
+            stmt = conexao.createStatement();
+            stmt.executeUpdate(query);
+            stmt.close();
+            conexao.close();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     private Dentista criarObjetoDentista(ResultSet result) throws SQLException{
         return new Dentista(
