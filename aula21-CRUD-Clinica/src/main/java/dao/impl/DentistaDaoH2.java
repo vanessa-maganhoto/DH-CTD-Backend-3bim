@@ -7,6 +7,7 @@ import dao.config.ConfiguracaoJDBC;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class DentistaDaoH2 implements IDao<Dentista> {
 
@@ -48,6 +49,29 @@ public class DentistaDaoH2 implements IDao<Dentista> {
     }
 
     // Buscar por ID
+    @Override
+    public Optional<Dentista> buscar(Integer id){
+        Connection conexao = configuracaoJDBC.conectarComBancoDeDados();
+        Statement stmt = null;
+        String query = String.format(
+                "SELECT id, nome, email, numMatricula, atendeConvenio " +
+                    "FROM dentistas WHERE id= '%s'", id);
+        Dentista dentista = null;
+
+        try{
+            stmt = conexao.createStatement();
+            ResultSet resultado = stmt.executeQuery(query);
+            while(resultado.next()){
+                dentista = criarObjetoDentista(resultado);
+            }
+            stmt.close();
+            conexao.close();
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return dentista != null ? Optional.of(dentista) : Optional.empty();
+    }
 
     // Buscar todos os registros
     @Override
@@ -77,6 +101,36 @@ public class DentistaDaoH2 implements IDao<Dentista> {
 
 
     // Atualizar
+    @Override
+    public Dentista atualizar(Dentista dentista){
+        Connection conexao = configuracaoJDBC.conectarComBancoDeDados();
+        String query = String.format(
+                "UPDATE dentistas SET nome = '%s', email = '%s', " +
+                "numMatricula = '%s', atendeConvenio = '%s' " +
+                "WHERE id = '%s' ",
+                dentista.getNome(),
+                dentista.getEmail(),
+                dentista.getNumMatricula(),
+                dentista.getAtendeConvenio(),
+                dentista.getId());
+
+        execute(conexao, query);
+        return dentista;
+    }
+
+    private void execute(Connection conexao, String query) {
+        try{
+            PreparedStatement pstm = null;
+            pstm = conexao.prepareStatement(query);
+            pstm.executeUpdate();
+            conexao.close();
+            pstm.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+
+    }
 
     // Excluir
     @Override

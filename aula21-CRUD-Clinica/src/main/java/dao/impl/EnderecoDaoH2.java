@@ -1,6 +1,7 @@
 package dao.impl;
 
 
+import com.dhbrasil.springboot.aula21.model.Dentista;
 import com.dhbrasil.springboot.aula21.model.Endereco;
 import dao.IDao;
 import dao.config.ConfiguracaoJDBC;
@@ -8,6 +9,7 @@ import dao.config.ConfiguracaoJDBC;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class EnderecoDaoH2 implements IDao<Endereco> {
 
@@ -46,7 +48,29 @@ public class EnderecoDaoH2 implements IDao<Endereco> {
     }
 
     // Buscar por ID
+    @Override
+    public Optional<Endereco> buscar(Integer id){
+        Connection conexao = configuracaoJDBC.conectarComBancoDeDados();
+        Statement stmt = null;
+        String query = String.format(
+                "SELECT id, rua, numero, bairro, cidade, estado " +
+                        "FROM enderecos WHERE id= '%s'", id);
+        Endereco endereco = null;
 
+        try{
+            stmt = conexao.createStatement();
+            ResultSet resultado = stmt.executeQuery(query);
+            while(resultado.next()){
+                endereco = criarObjetoEndereco(resultado);
+            }
+            stmt.close();
+            conexao.close();
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return endereco != null ? Optional.of(endereco) : Optional.empty();
+    }
     // Buscar todos os registros
     @Override
     public List<Endereco> buscarTodos(){
@@ -74,6 +98,38 @@ public class EnderecoDaoH2 implements IDao<Endereco> {
     }
 
     // Atualizar
+    @Override
+    public Endereco atualizar(Endereco endereco){
+        Connection conexao = configuracaoJDBC.conectarComBancoDeDados();
+        String query = String.format(
+                "UPDATE enderecos SET rua = '%s', numero = '%s', " +
+                        "bairro = '%s', cidade = '%s' " +
+                        "estado = '%s' " +
+                        "WHERE id = '%s' ",
+                endereco.getRua(),
+                endereco.getNumero(),
+                endereco.getBairro(),
+                endereco.getCidade(),
+                endereco.getEstado(),
+                endereco.getId());
+
+        execute(conexao, query);
+        return endereco;
+    }
+
+    private void execute(Connection conexao, String query) {
+        try{
+            PreparedStatement pstm = null;
+            pstm = conexao.prepareStatement(query);
+            pstm.executeUpdate();
+            conexao.close();
+            pstm.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+
+    }
 
     // Excluir
 

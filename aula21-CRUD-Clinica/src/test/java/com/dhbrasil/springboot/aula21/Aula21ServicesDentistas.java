@@ -11,79 +11,63 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 class Aula21ServicesDentistas {
 
-	private static DentistaService dentistaService = new DentistaService(new DentistaDaoH2());
-	private static UsuarioService usuarioService = new UsuarioService(new UsuarioDaoH2());
+	private static DentistaService dentistaService = new DentistaService(
+			new DentistaDaoH2());
 
 	@Test
 	void contextLoads() {
 	}
 
-
 	@Disabled
 	@Test
-	public void carregarTresDentistas(){
+	public void carregarTresDentistas() {
 		Dentista d1 = new Dentista(
-				"Pedro", "pramos@gmail.com", 21547, 0
-		);
-
+				"Pedro", "pramos@gmail.com", 21547, 0);
 		Dentista d2 = new Dentista(
-				"Marcia", "marcia@gmail.com", 12539, 1
-		);
-
+				"Marta", "msilveira@outlook.com", 12539, 1);
 		Dentista d3 = new Dentista(
-				"Antonela", "antonela@gmail.com", 44127, 1
-		);
+				"Marcia", "marcia.soares@hotmail.com", 44127, 1);
 
 		dentistaService.salvar(d1);
 		dentistaService.salvar(d2);
 		dentistaService.salvar(d3);
 	}
+
 	@Disabled
 	@Test
-	public void excluirDentistaComId2(){
+	public void excluirDentistaComId2() {
 		dentistaService.excluir(2);
 	}
 
 	@Disabled
 	@Test
-	public void trazerTodosOsDentistas(){
-		List<Dentista> dentistaList = dentistaService.buscarTodos();
-		System.out.println(dentistaList);
+	public void buscarDentistaPorId1() {
+		Optional<Dentista> d = dentistaService.buscar(1);
+		System.out.println(d);
 	}
 
+	@Disabled
 	@Test
-	public void inserirTresUsuarios(){
-		Usuario u1 = new Usuario(
-				"Patricia", "patricia@gmail.com", "pati123", 0
-		);
-
-		Usuario u2 = new Usuario(
-				"Maria", "maria@gmail.com", "maria123", 1
-		);
-
-		Usuario u3 = new Usuario(
-				"Ana", "ana@gmail.com", "ana222", 0
-		);
-
-		usuarioService.salvar(u1);
-		usuarioService.salvar(u2);
-		usuarioService.salvar(u3);
-
+	public void atualizarDentistaComId3() {
+		Dentista dentAt = new Dentista(
+				3, "Marcia Dantas Moraes",
+				"dentista@dantas.com.br",
+				44127, 0);
+		Dentista dentUp = dentistaService.atualizar(dentAt);
+		System.out.println(dentUp);
 	}
 
+	@Disabled
 	@Test
-	public void trazerTodosOsUsuarios(){
-		List<Usuario> usuarioListList = usuarioService.buscarTodos();
-		System.out.println(usuarioListList);
-	}
-
-	@Test
-	public void excluirUsuarioComId2(){
-		usuarioService.excluir(2);
+	public void trazerTodosOsDentistas() {
+		List<Dentista> dentistasList = dentistaService.buscarTodos();
+		System.out.println(dentistasList);
 	}
 
 }
+

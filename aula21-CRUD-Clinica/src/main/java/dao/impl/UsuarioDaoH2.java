@@ -8,6 +8,7 @@ import dao.config.ConfiguracaoJDBC;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class UsuarioDaoH2 implements IDao<Usuario> {
 
@@ -45,7 +46,31 @@ public class UsuarioDaoH2 implements IDao<Usuario> {
         return usuario;
     }
 
+
     // Buscar por ID
+    @Override
+    public Optional<Usuario> buscar(Integer id) {
+        Connection conexao = configuracaoJDBC.conectarComBancoDeDados();
+        Statement stmt = null;
+        String query = String.format(
+                "SELECT id, nome, email, senha, acesso " +
+                        "FROM usuarios WHERE id= '%s'", id);
+        Usuario usuario = null;
+
+        try{
+            stmt = conexao.createStatement();
+            ResultSet resultado = stmt.executeQuery(query);
+            while(resultado.next()){
+                usuario = criarObjetoUsuario(resultado);
+            }
+            stmt.close();
+            conexao.close();
+
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return usuario != null ? Optional.of(usuario) : Optional.empty();
+    }
 
     // Buscar todos os registros
     @Override
@@ -61,7 +86,7 @@ public class UsuarioDaoH2 implements IDao<Usuario> {
             ResultSet result = pstmt.executeQuery();
 
             while(result.next()){
-                usuarios.add(criarObjetoDentista(result));
+                usuarios.add(criarObjetoUsuario(result));
             }
             pstmt.close();
             connection.close();
@@ -73,7 +98,39 @@ public class UsuarioDaoH2 implements IDao<Usuario> {
         return usuarios;
     }
 
+
+
     //Atualizar
+    @Override
+    public Usuario atualizar(Usuario usuario) {
+        Connection conexao = configuracaoJDBC.conectarComBancoDeDados();
+        String query = String.format(
+                "UPDATE usuarios SET nome = '%s', email = '%s', " +
+                        "senha = '%s', acesso = '%s' " +
+                        "WHERE id = '%s' ",
+                usuario.getNome(),
+                usuario.getEmail(),
+                usuario.getSenha(),
+                usuario.getAcesso(),
+                usuario.getId());
+
+        execute(conexao, query);
+        return usuario;
+    }
+
+    private void execute(Connection conexao, String query) {
+        try{
+            PreparedStatement pstm = null;
+            pstm = conexao.prepareStatement(query);
+            pstm.executeUpdate();
+            conexao.close();
+            pstm.close();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+
+    }
 
     // Excluir
     @Override
@@ -91,7 +148,7 @@ public class UsuarioDaoH2 implements IDao<Usuario> {
         }
     }
 
-    private Usuario criarObjetoDentista(ResultSet result) throws SQLException{
+    private Usuario criarObjetoUsuario(ResultSet result) throws SQLException{
         return new Usuario(
                 result.getInt("id"),
                 result.getString("nome"),
