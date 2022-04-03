@@ -1,9 +1,8 @@
 package com.dhbrasil.springboot.aula21.controller;
 
-import com.dhbrasil.springboot.aula21.model.Dentista;
 import com.dhbrasil.springboot.aula21.model.Usuario;
 import com.dhbrasil.springboot.aula21.service.UsuarioService;
-import dao.impl.UsuarioDaoH2;
+import resources.impl.UsuarioDaoH2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

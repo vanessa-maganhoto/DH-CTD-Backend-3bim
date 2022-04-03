@@ -11,6 +11,10 @@ public class Dentista {
     public Dentista() {
     }
 
+    public Dentista(Integer id) {
+        this.id = id;
+    }
+
     public Dentista(Integer id, String nome, String email, Integer numMatricula, Integer atendeConvenio) {
         this.id = id;
         this.nome = nome;

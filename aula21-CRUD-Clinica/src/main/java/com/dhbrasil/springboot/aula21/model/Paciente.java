@@ -12,6 +12,10 @@ public class Paciente {
 
     public Paciente (){}
 
+    public Paciente(Integer id) {
+        this.id = id;
+    }
+
     public Paciente(Integer id, String nome, String sobrenome, String cpf, Date dataCad, Endereco endereco) {
         this.id = id;
         this.nome = nome;

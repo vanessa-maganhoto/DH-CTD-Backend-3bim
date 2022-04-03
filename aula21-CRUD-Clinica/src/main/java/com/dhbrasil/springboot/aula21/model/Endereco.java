@@ -12,6 +12,10 @@ public class Endereco {
     public Endereco() {
     }
 
+    public Endereco(Integer id) {
+        this.id = id;
+    }
+
     public Endereco(Integer id, String rua, String numero, String bairro, String cidade, String estado) {
         this.id = id;
         this.rua = rua;

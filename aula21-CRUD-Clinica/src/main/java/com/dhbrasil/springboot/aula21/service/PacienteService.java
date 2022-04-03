@@ -1,7 +1,7 @@
 package com.dhbrasil.springboot.aula21.service;
 
 import com.dhbrasil.springboot.aula21.model.Paciente;
-import dao.IDao;
+import resources.IDao;
 
 import java.util.List;
 import java.util.Optional;

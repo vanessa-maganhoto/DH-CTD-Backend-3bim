@@ -1,6 +1,7 @@
 package com.dhbrasil.springboot.aula21.model;
 
-public class Usuario {
+public class
+Usuario {
 
     private Integer id;
     private String nome;
@@ -9,6 +10,10 @@ public class Usuario {
     private Integer acesso;
 
     public Usuario(){}
+
+    public Usuario(Integer id) {
+        this.id = id;
+    }
 
     public Usuario(Integer id, String nome, String email, String senha, Integer acesso) {
         this.id = id;
