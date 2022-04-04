@@ -54,6 +54,7 @@ public class ProdutoController {
 
     @GetMapping
     public ResponseEntity<List<Produto>> buscarTodos(){
+
         return ResponseEntity.ok(produtoService.buscarTodos());
     }
 }
