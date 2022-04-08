@@ -16,8 +16,8 @@ public class Jogador {
     private Double peso;
     private Double altura;
 
-    @JsonIgnore(value = true)
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @JsonIgnore(value = true)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "time_id")
     private Time time;
 

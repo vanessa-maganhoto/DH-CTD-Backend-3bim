@@ -5,40 +5,39 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "tb_dentista")
-public class Dentista {
+@Table(name = "tb_usuario")
+public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String nome;
     private String email;
-    private Integer numMatricula;
-    private Integer atendeConvenio;
+    private String senha;
+    private Integer acesso;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "dentista")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario")
     private Set<Consulta> consulta = new HashSet<>();
 
-    public Dentista() {
-    }
+    public Usuario(){}
 
-    public Dentista(Integer id) {
+    public Usuario(Integer id) {
         this.id = id;
     }
 
-    public Dentista(Integer id, String nome, String email, Integer numMatricula, Integer atendeConvenio) {
+    public Usuario(Integer id, String nome, String email, String senha, Integer acesso) {
         this.id = id;
         this.nome = nome;
         this.email = email;
-        this.numMatricula = numMatricula;
-        this.atendeConvenio = atendeConvenio;
+        this.senha = senha;
+        this.acesso = acesso;
     }
 
-    public Dentista(String nome, String email, Integer numMatricula, Integer atendeConvenio) {
+    public Usuario(String nome, String email, String senha, Integer acesso) {
         this.nome = nome;
         this.email = email;
-        this.numMatricula = numMatricula;
-        this.atendeConvenio = atendeConvenio;
+        this.senha = senha;
+        this.acesso = acesso;
     }
 
     public Integer getId() {
@@ -65,20 +64,20 @@ public class Dentista {
         this.email = email;
     }
 
-    public Integer getNumMatricula() {
-        return numMatricula;
+    public String getSenha() {
+        return senha;
     }
 
-    public void setNumMatricula(Integer numMatricula) {
-        this.numMatricula = numMatricula;
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
-    public Integer getAtendeConvenio() {
-        return atendeConvenio;
+    public Integer getAcesso() {
+        return acesso;
     }
 
-    public void setAtendeConvenio(Integer atendeConvenio) {
-        this.atendeConvenio = atendeConvenio;
+    public void setAcesso(Integer acesso) {
+        this.acesso = acesso;
     }
 
     public Set<Consulta> getConsulta(){
@@ -86,15 +85,15 @@ public class Dentista {
     }
 
 
+
     @Override
     public String toString() {
-        return "Dentista{" +
+        return "Usuario{" +
                 "id=" + id +
                 ", nome='" + nome + '\'' +
                 ", email='" + email + '\'' +
-                ", numMatricula=" + numMatricula +
-                ", atendeConvenio=" + atendeConvenio +
+                ", senha='" + senha + '\'' +
+                ", acesso=" + acesso +
                 '}';
     }
-
 }

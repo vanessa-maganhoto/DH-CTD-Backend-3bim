@@ -1,6 +1,7 @@
 package com.dh.hibernate.aula33.aula33.controller;
 
 import com.dh.hibernate.aula33.aula33.model.Jogador;
+import com.dh.hibernate.aula33.aula33.model.Time;
 import com.dh.hibernate.aula33.aula33.service.JogadorService;
 import com.dh.hibernate.aula33.aula33.service.TimeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,53 @@ public class JogadorController {
     }
 
     @PostMapping
-    public ResponseEntity<Jogador> salvar(@RequestBody Jogador jogador) {
-        timeService.salvarTime(jogador.getTime());
-        return ResponseEntity.ok(jogadorService.salvarJogador(jogador));
+    public ResponseEntity<?> salvar(@RequestBody Jogador jogador) {
+        //timeService.salvarTime(jogador.getTime());
+//        return ResponseEntity.ok(jogadorService.salvarJogador(jogador));
+
+        jogadorService.salvarJogador(jogador);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Jogador> buscarId(@PathVariable Integer id){
+//        timeService.buscar(id);
+        return ResponseEntity.ok(jogadorService.buscarId(id).orElseThrow(
+                ()-> new ResponseStatusException(NOT_FOUND, "Jogador não encontrado")
+        ));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Jogador>> buscarTodosJogadores(){
+        timeService.buscarTodos();
+        return ResponseEntity.ok(jogadorService.buscarTodosJogadores());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletar (@PathVariable Integer id){
+        ResponseEntity<String> response = null;
+        Optional<Jogador> j = jogadorService.buscarId(id);
+
+
+        if(jogadorService.buscarId(id).isPresent()){
+            jogadorService.deletar(id);
+            response = ResponseEntity.status(HttpStatus.NO_CONTENT).body("Jogador excluído");
+        } else {
+            response = ResponseEntity.status(NOT_FOUND).build();
+        }
+        return response;
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Jogador> atualizar(@RequestBody Jogador jogador, @PathVariable Integer id){
+        ResponseEntity<Jogador> response = null;
+        if(jogador.getId() != null && jogadorService.buscarId(jogador.getId()).isPresent()) {
+            response = ResponseEntity.ok(jogadorService.atualizar(jogador));
+        } else {
+            response = ResponseEntity.status(NOT_FOUND).build();
+        }
+        return response;
+    }
+
 
 }
