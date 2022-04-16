@@ -25,12 +25,7 @@ public class DentistaService {
 
     @Transactional
     public DentistaDto salvarDentista(DentistaDto dentistaDto) {
-        Dentista d = new Dentista();
-        d.setNome(dentistaDto.getNome());
-        d.setEmail(dentistaDto.getEmail());
-        d.setNumMatricula(dentistaDto.getNumMatricula());
-        d.setAtendeConvenio(dentistaDto.getAtendeConvenio());
-        d = dentistaRepository.save(d);
+        Dentista d = dentistaRepository.save(dentistaDto.toEntity());
         return new DentistaDto(d);
     }
 

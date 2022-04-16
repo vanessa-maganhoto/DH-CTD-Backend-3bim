@@ -59,6 +59,16 @@ public class ConsultaDto {
         }
     }
 
+    public Consulta toEntity(){
+        return new Consulta(
+                this.id,
+                this.dataCad,
+                this.dataAtend,
+                this.paciente == null ? null : this.paciente.toEntity(),
+                this.dentista == null ? null : this.dentista.toEntity(),
+                this.usuario == null ? null : this.usuario.toEntity());
+    }
+
     public Integer getId() {
         return id;
     }

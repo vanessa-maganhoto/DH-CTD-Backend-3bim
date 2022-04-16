@@ -1,29 +1,29 @@
 package com.dhbrasil.aula36Mesa.aula36mesa.dto;
 
-import com.dhbrasil.aula36Mesa.aula36mesa.model.Consulta;
-import com.dhbrasil.aula36Mesa.aula36mesa.model.Endereco;
 import com.dhbrasil.aula36Mesa.aula36mesa.model.Paciente;
 
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class PacienteDto {
 
     private Integer id;
+    @NotBlank
     private String nome;
+    @NotBlank
     private String sobrenome;
+    @NotBlank
     private String cpf;
+    @NotNull
     private Date dataCad;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="endereco_id", referencedColumnName = "id")
-    private Endereco endereco;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "paciente")
-    private Consulta consulta;
+    @NotNull
+    @Valid
+    private EnderecoDto endereco;
+
 
 
     public PacienteDto (Paciente paciente){
@@ -40,6 +40,16 @@ public class PacienteDto {
         this.sobrenome = sobrenome;
         this.cpf = cpf;
         this.dataCad = dataCad;
+    }
+
+    public Paciente toEntity(){
+        return new Paciente(
+                this.id,
+                this.nome,
+                this.sobrenome,
+                this.cpf,
+                this.dataCad,
+                this.endereco == null ? null : this.endereco.toEntity());
     }
 
     public Integer getId() {
@@ -80,5 +90,13 @@ public class PacienteDto {
 
     public void setDataCad(Date dataCad) {
         this.dataCad = dataCad;
+    }
+
+    public EnderecoDto getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(EnderecoDto endereco) {
+        this.endereco = endereco;
     }
 }

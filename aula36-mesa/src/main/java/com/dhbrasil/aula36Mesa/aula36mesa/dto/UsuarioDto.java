@@ -4,15 +4,21 @@ import com.dhbrasil.aula36Mesa.aula36mesa.model.Consulta;
 import com.dhbrasil.aula36Mesa.aula36mesa.model.Usuario;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class UsuarioDto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @NotBlank
     private String nome;
+    @NotBlank
     private String email;
+    @NotBlank
     private String senha;
+    @NotNull
     private Integer acesso;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario")
@@ -32,6 +38,15 @@ public class UsuarioDto {
         this.email = email;
         this.senha = senha;
         this.acesso = acesso;
+    }
+
+    public Usuario toEntity(){
+        return new Usuario(
+                this.id,
+                this.nome,
+                this.email,
+                this.senha,
+                this.acesso);
     }
 
     public Integer getId() {

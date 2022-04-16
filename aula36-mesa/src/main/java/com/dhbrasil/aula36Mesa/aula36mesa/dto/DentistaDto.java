@@ -35,6 +35,15 @@ public class DentistaDto {
         atendeConvenio = dentista.getAtendeConvenio();
     }
 
+    public Dentista toEntity(){
+        return new Dentista(
+                this.id,
+                this.nome,
+                this.email,
+                this.numMatricula,
+                this.atendeConvenio);
+    }
+
     public Integer getId() {
         return id;
     }
